@@ -1,8 +1,8 @@
 # 导航栏
 menu:                      # 导航栏上的链接
-  Home: /
-  Archives: /archives
-  About: /about
+  主页: /
+  归档: /archives
+  友链: /links
 rss: /atom.xml
 
 home:
@@ -33,7 +33,7 @@ links:
     url: tencent://message/?uin=3305162655&Site=&Menu=yes
   - name: GitHub
     icon: fa-brands fa-github
-    url: https://github.com/SkoHit
+    url: https://github.com/zhidongli-s
   - name: Email
     icon: fa-regular fa-envelope
     url: mailto:Zhidongli@outlook.com
