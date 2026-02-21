@@ -51,7 +51,51 @@ hexo server
 
 ---
 
+### 4. 创建 GitHub 仓库
 
+将项目托管至 GitHub。具体操作步骤如下：
 
+1. 访问 [GitHub](https://github.com) 并使用个人账号登录
+2. 点击页面右上角的 "+" 图标，选择 "New repository"
+3. 输入仓库名称（建议使用 `my-blog` 或类似名称），添加项目描述（可选）
+4. 选择 "Public" 选项，**不要**勾选 "Initialize this repository with a README"
+5. 点击 "Create repository" 完成创建
 
+返回本地项目目录，执行以下命令完成初始化：
 
+```bash
+git init
+git add .
+git commit -m "Initial commit"
+git branch -M main
+git remote add origin https://github.com/你的用户名/你的仓库名.git
+git push -u origin main
+```
+
+执行完毕后，项目代码将成功推送至 GitHub 远程仓库。
+
+---
+
+### 5. 部署至 Cloudflare Pages
+
+完成 GitHub 托管后，可通过 Cloudflare Pages 实现自动化部署。该服务提供免费的静态网站托管，并支持自定义域名。
+
+部署流程：
+
+1. 访问 [Cloudflare](https://dash.cloudflare.com) 注册账号并完成验证
+2. 登录后导航至 "Pages" 页面，点击 "Create a project"
+3. 选择 "Connect to Git" 选项，从列表中选择已创建的 GitHub 仓库
+4. 点击 "Begin setup" 进入配置界面
+5. 配置构建参数：
+   - **Framework preset**: 选择 Hexo
+   - **Build command**: 输入 `npm install -g hexo; hexo clean; hexo generate`
+   - **Build output directory**: 输入 `/public`
+6. 点击 "Save and Deploy" 启动部署
+
+部署完成后，Cloudflare Pages 将提供 `https://项目名.pages.dev` 格式的访问地址。如需使用自定义域名，可在 "Custom domains" 选项卡中添加并进行 DNS 配置。
+
+---
+
+### 总结
+
+通过以上步骤，您已成功完成 Hexo 博客的本地搭建、代码托管和线上部署。后续可根据需要安装主题、配置插件及撰写文章，进一步完善个人博客功能。
