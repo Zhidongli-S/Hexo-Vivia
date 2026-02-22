@@ -23,7 +23,7 @@ hue: 250                         # 主题色调 (例如：红: 0，橙: 60，蓝
 # 个人信息
 avatar: /OIP-C.webp
 author: 枝动力
-subtitle: 渺渺星海,唯我独芒!
+subtitle: 渺渺星海,唯我独芒！
 links:
   - name: Bilibili
     icon: fa-brands fa-bilibili
