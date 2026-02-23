@@ -22,94 +22,89 @@ jobs:
         with:
           node-version: '20'
 
-      - name: Scan and Create Issues
+      - name: Create Labels
         env:
           GH_TOKEN: ${{ github.token }}
-          REPO: ${{ github.repository }}
         run: |
-          # 创建标签
-          echo "Creating labels..."
+          # 创建标签（忽略已存在的错误）
           gh api --method POST \
             -H "Accept: application/vnd.github+json" \
             /repos/${{ github.repository }}/labels \
             -f name="gitalk" \
             -f color="0052CC" \
-            -f description="Gitalk comments" 2>/dev/null || echo "Label gitalk already exists"
+            -f description="Gitalk comments" 2>/dev/null || true
           
           gh api --method POST \
             -H "Accept: application/vnd.github+json" \
             /repos/${{ github.repository }}/labels \
             -f name="links" \
             -f color="0E8A16" \
-            -f description="Links page" 2>/dev/null || echo "Label links already exists"
+            -f description="Links page" 2>/dev/null || true
           
           gh api --method POST \
             -H "Accept: application/vnd.github+json" \
             /repos/${{ github.repository }}/labels \
             -f name="post" \
             -f color="F9D0C4" \
-            -f description="Blog post" 2>/dev/null || echo "Label post already exists"
+            -f description="Blog post" 2>/dev/null || true
           
           gh api --method POST \
             -H "Accept: application/vnd.github+json" \
             /repos/${{ github.repository }}/labels \
             -f name="page" \
             -f color="C5DEF5" \
-            -f description="Static page" 2>/dev/null || echo "Label page already exists"
-          
-          # 扫描source目录下的所有文章和页面
-          echo "Scanning for posts and pages..."
-          
-          # 创建Links页面issue
+            -f description="Static page" 2>/dev/null || true
+
+      - name: Create Issues
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+        run: |
           echo "Creating issue for Links page..."
           gh issue create \
             --repo "$REPO" \
             --title "Gitalk: Links 页面评论" \
             --body "This issue is used to store comments for: links" \
-            --label "gitalk,links" 2>/dev/null || echo "Issue for links already exists"
+            --label "gitalk,links" 2>/dev/null || true
           
           # 扫描_posts目录下的所有文章
-          if [ -d "source/_posts" ]; then
-            for file in source/_posts/*.md; do
-              if [ -f "$file" ]; then
-                # 提取文件名（不含扩展名）
-                filename=$(basename "$file" .md)
-                # 提取标题（从文件内容中读取title）
-                title=$(grep "^title:" "$file" | head -1 | sed 's/title:[[:space:]]*//' | sed 's/["'"'"]//g')
+          echo "Scanning posts directory..."
+          for file in source/_posts/*.md; do
+            if [ -f "$file" ]; then
+              filename=$(basename "$file" .md)
+              title=$(grep "^title:" "$file" | head -1 | cut -d':' -f2- | sed 's/^[[:space:]]*//' | sed 's/["'"'"]//g' || echo "$filename")
+              if [ -z "$title" ]; then
+                title="$filename"
+              fi
+              
+              echo "Creating issue for: $title"
+              gh issue create \
+                --repo "$REPO" \
+                --title "Gitalk: $title" \
+                --body "This issue is used to store comments for: $filename" \
+                --label "gitalk,post" 2>/dev/null || true
+            fi
+          done
+          
+          # 扫描其他页面
+          echo "Scanning pages directory..."
+          for dir in source/*/; do
+            if [ -f "$dir/index.md" ]; then
+              pagename=$(basename "$dir")
+              if [ "$pagename" != "_posts" ] && [ "$pagename" != "links" ]; then
+                title=$(grep "^title:" "$dir/index.md" | head -1 | cut -d':' -f2- | sed 's/^[[:space:]]*//' | sed 's/["'"'"]//g' || echo "$pagename")
                 if [ -z "$title" ]; then
-                  title="$filename"
+                  title="$pagename"
                 fi
                 
-                echo "Creating issue for post: $title"
+                echo "Creating issue for: $title"
                 gh issue create \
                   --repo "$REPO" \
                   --title "Gitalk: $title" \
-                  --body "This issue is used to store comments for: $filename" \
-                  --label "gitalk,post" 2>/dev/null || echo "Issue for $filename already exists"
+                  --body "This issue is used to store comments for: $pagename" \
+                  --label "gitalk,page" 2>/dev/null || true
               fi
-            done
-          fi
-          
-          # 扫描其他页面（如about等）
-          if [ -d "source" ]; then
-            for dir in source/*/; do
-              if [ -f "$dir/index.md" ]; then
-                pagename=$(basename "$dir")
-                if [ "$pagename" != "_posts" ] && [ "$pagename" != "links" ]; then
-                  title=$(grep "^title:" "$dir/index.md" | head -1 | sed 's/title:[[:space:]]*//' | sed 's/["'"'"]//g')
-                  if [ -z "$title" ]; then
-                    title="$pagename"
-                  fi
-                  
-                  echo "Creating issue for page: $title"
-                  gh issue create \
-                    --repo "$REPO" \
-                    --title "Gitalk: $title" \
-                    --body "This issue is used to store comments for: $pagename" \
-                    --label "gitalk,page" 2>/dev/null || echo "Issue for $pagename already exists"
-                fi
-              fi
-            done
-          fi
+            fi
+          done
           
           echo "Gitalk issues initialization completed!"
