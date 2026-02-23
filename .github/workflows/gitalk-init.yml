@@ -1,0 +1,102 @@
+name: Gitalk Comments Init
+
+on:
+  push:
+    branches:
+      - main
+      - master
+  workflow_dispatch:
+
+jobs:
+  init-comments:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: |
+          npm install axios
+
+      - name: Init Gitalk Comments
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPO_OWNER: zhidongli-s
+          REPO_NAME: Hexo-Vivia
+        run: |
+          node << 'EOF'
+          const axios = require('axios');
+          
+          const owner = process.env.REPO_OWNER;
+          const repo = process.env.REPO_NAME;
+          const token = process.env.GITHUB_TOKEN;
+          
+          // 博客文章列表（需要手动维护或使用脚本自动生成）
+          const posts = [
+            { id: 'links', title: 'Links 页面评论', labels: ['gitalk', 'links'] },
+            { id: '2025-12-19-如何使用Hexo轻松构建一个博客网站', title: '如何使用Hexo轻松构建一个博客网站', labels: ['gitalk', 'post'] }
+          ];
+          
+          async function initComment(post) {
+            try {
+              // 检查是否已存在该issue
+              const searchResponse = await axios.get(
+                `https://api.github.com/repos/${owner}/${repo}/issues`,
+                {
+                  headers: {
+                    'Authorization': `token ${token}`,
+                    'Accept': 'application/vnd.github.v3+json'
+                  },
+                  params: {
+                    labels: post.labels.join(','),
+                    state: 'all'
+                  }
+                }
+              );
+              
+              const exists = searchResponse.data.some(issue => 
+                issue.title.includes(post.id) || issue.body?.includes(post.id)
+              );
+              
+              if (exists) {
+                console.log(`Issue for ${post.id} already exists, skipping...`);
+                return;
+              }
+              
+              // 创建新的issue
+              const createResponse = await axios.post(
+                `https://api.github.com/repos/${owner}/${repo}/issues`,
+                {
+                  title: `Gitalk: ${post.title}`,
+                  body: `This issue is used to store comments for: ${post.id}\n\nPage ID: ${post.id}`,
+                  labels: post.labels
+                },
+                {
+                  headers: {
+                    'Authorization': `token ${token}`,
+                    'Accept': 'application/vnd.github.v3+json'
+                  }
+                }
+              );
+              
+              console.log(`Created issue for ${post.id}: ${createResponse.data.html_url}`);
+            } catch (error) {
+              console.error(`Error processing ${post.id}:`, error.message);
+            }
+          }
+          
+          async function main() {
+            for (const post of posts) {
+              await initComment(post);
+              // 添加延迟避免触发GitHub API限制
+              await new Promise(resolve => setTimeout(resolve, 1000));
+            }
+          }
+          
+          main();
+          EOF
