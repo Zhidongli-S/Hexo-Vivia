@@ -308,6 +308,13 @@
             id = id.substring(0, 50);
         }
         
+        // 从cookie读取token，避免重复登录
+        function getCookie(name) {
+            var value = "; " + document.cookie;
+            var parts = value.split("; " + name + "=");
+            if (parts.length === 2) return parts.pop().split(";").shift();
+        }
+        
         var gitalk = new Gitalk({
             clientID: '<%- theme.comment.gitalk.ClientID %>',
             clientSecret: '<%- theme.comment.gitalk.ClientSecret %>',
@@ -316,7 +323,9 @@
             admin: ['<%- theme.comment.gitalk.admin %>'],
             id: id,
             distractionFreeMode: <%- theme.comment.gitalk.distractionFreeMode %>,
-            language: 'zh-CN'
+            language: 'zh-CN',
+            // 使用CORS代理解决网络问题
+            proxy: 'https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token'
         });
         
         gitalk.render('gitalk-container');
