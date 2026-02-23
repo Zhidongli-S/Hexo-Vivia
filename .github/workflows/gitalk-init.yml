@@ -17,94 +17,93 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-
-      - name: Create Labels
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          # 创建标签（忽略已存在的错误）
-          gh api --method POST \
-            -H "Accept: application/vnd.github+json" \
-            /repos/${{ github.repository }}/labels \
-            -f name="gitalk" \
-            -f color="0052CC" \
-            -f description="Gitalk comments" 2>/dev/null || true
-          
-          gh api --method POST \
-            -H "Accept: application/vnd.github+json" \
-            /repos/${{ github.repository }}/labels \
-            -f name="links" \
-            -f color="0E8A16" \
-            -f description="Links page" 2>/dev/null || true
-          
-          gh api --method POST \
-            -H "Accept: application/vnd.github+json" \
-            /repos/${{ github.repository }}/labels \
-            -f name="post" \
-            -f color="F9D0C4" \
-            -f description="Blog post" 2>/dev/null || true
-          
-          gh api --method POST \
-            -H "Accept: application/vnd.github+json" \
-            /repos/${{ github.repository }}/labels \
-            -f name="page" \
-            -f color="C5DEF5" \
-            -f description="Static page" 2>/dev/null || true
-
-      - name: Create Issues
+      - name: Create Labels and Issues
         env:
           GH_TOKEN: ${{ github.token }}
           REPO: ${{ github.repository }}
         run: |
-          echo "Creating issue for Links page..."
-          gh issue create \
-            --repo "$REPO" \
-            --title "Gitalk: Links 页面评论" \
-            --body "This issue is used to store comments for: links" \
-            --label "gitalk,links" 2>/dev/null || true
-          
-          # 扫描_posts目录下的所有文章
-          echo "Scanning posts directory..."
-          for file in source/_posts/*.md; do
-            if [ -f "$file" ]; then
-              filename=$(basename "$file" .md)
-              title=$(grep "^title:" "$file" | head -1 | cut -d':' -f2- | sed 's/^[[:space:]]*//' | sed 's/["'"'"]//g' || echo "$filename")
-              if [ -z "$title" ]; then
-                title="$filename"
-              fi
+          node << 'NODE_EOF'
+          const { execSync } = require('child_process');
+          const fs = require('fs');
+          const path = require('path');
+
+          const repo = process.env.REPO;
+
+          // 创建标签
+          const labels = [
+            { name: 'gitalk', color: '0052CC', desc: 'Gitalk comments' },
+            { name: 'links', color: '0E8A16', desc: 'Links page' },
+            { name: 'post', color: 'F9D0C4', desc: 'Blog post' },
+            { name: 'page', color: 'C5DEF5', desc: 'Static page' }
+          ];
+
+          console.log('Creating labels...');
+          for (const label of labels) {
+            try {
+              execSync(`gh api --method POST -H "Accept: application/vnd.github+json" /repos/${repo}/labels -f name="${label.name}" -f color="${label.color}" -f description="${label.desc}"`, { stdio: 'ignore' });
+              console.log(`Created label: ${label.name}`);
+            } catch (e) {
+              console.log(`Label ${label.name} already exists`);
+            }
+          }
+
+          // 创建Links页面issue
+          console.log('Creating issue for Links page...');
+          try {
+            execSync(`gh issue create --repo "${repo}" --title "Gitalk: Links 页面评论" --body "This issue is used to store comments for: links" --label "gitalk,links"`, { stdio: 'ignore' });
+            console.log('Created issue for Links');
+          } catch (e) {
+            console.log('Issue for Links already exists');
+          }
+
+          // 扫描_posts目录
+          console.log('Scanning posts directory...');
+          const postsDir = 'source/_posts';
+          if (fs.existsSync(postsDir)) {
+            const files = fs.readdirSync(postsDir).filter(f => f.endsWith('.md'));
+            for (const file of files) {
+              const filepath = path.join(postsDir, file);
+              const content = fs.readFileSync(filepath, 'utf8');
+              const filename = file.replace('.md', '');
               
-              echo "Creating issue for: $title"
-              gh issue create \
-                --repo "$REPO" \
-                --title "Gitalk: $title" \
-                --body "This issue is used to store comments for: $filename" \
-                --label "gitalk,post" 2>/dev/null || true
-            fi
-          done
-          
-          # 扫描其他页面
-          echo "Scanning pages directory..."
-          for dir in source/*/; do
-            if [ -f "$dir/index.md" ]; then
-              pagename=$(basename "$dir")
-              if [ "$pagename" != "_posts" ] && [ "$pagename" != "links" ]; then
-                title=$(grep "^title:" "$dir/index.md" | head -1 | cut -d':' -f2- | sed 's/^[[:space:]]*//' | sed 's/["'"'"]//g' || echo "$pagename")
-                if [ -z "$title" ]; then
-                  title="$pagename"
-                fi
+              // 提取title
+              const titleMatch = content.match(/^title:\s*["']?([^"'\n]+)["']?/m);
+              const title = titleMatch ? titleMatch[1].trim() : filename;
+              
+              console.log(`Creating issue for post: ${title}`);
+              try {
+                execSync(`gh issue create --repo "${repo}" --title "Gitalk: ${title}" --body "This issue is used to store comments for: ${filename}" --label "gitalk,post"`, { stdio: 'ignore' });
+                console.log(`Created issue for ${filename}`);
+              } catch (e) {
+                console.log(`Issue for ${filename} already exists`);
+              }
+            }
+          }
+
+          // 扫描其他页面
+          console.log('Scanning pages directory...');
+          const sourceDir = 'source';
+          if (fs.existsSync(sourceDir)) {
+            const dirs = fs.readdirSync(sourceDir, { withFileTypes: true })
+              .filter(d => d.isDirectory() && d.name !== '_posts' && d.name !== 'links');
+            
+            for (const dir of dirs) {
+              const indexPath = path.join(sourceDir, dir.name, 'index.md');
+              if (fs.existsSync(indexPath)) {
+                const content = fs.readFileSync(indexPath, 'utf8');
+                const titleMatch = content.match(/^title:\s*["']?([^"'\n]+)["']?/m);
+                const title = titleMatch ? titleMatch[1].trim() : dir.name;
                 
-                echo "Creating issue for: $title"
-                gh issue create \
-                  --repo "$REPO" \
-                  --title "Gitalk: $title" \
-                  --body "This issue is used to store comments for: $pagename" \
-                  --label "gitalk,page" 2>/dev/null || true
-              fi
-            fi
-          done
-          
-          echo "Gitalk issues initialization completed!"
+                console.log(`Creating issue for page: ${title}`);
+                try {
+                  execSync(`gh issue create --repo "${repo}" --title "Gitalk: ${title}" --body "This issue is used to store comments for: ${dir.name}" --label "gitalk,page"`, { stdio: 'ignore' });
+                  console.log(`Created issue for ${dir.name}`);
+                } catch (e) {
+                  console.log(`Issue for ${dir.name} already exists`);
+                }
+              }
+            }
+          }
+
+          console.log('Gitalk issues initialization completed!');
+          NODE_EOF
