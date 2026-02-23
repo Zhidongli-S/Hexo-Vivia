@@ -29,6 +29,24 @@ jobs:
 
           const repo = process.env.REPO;
 
+          // 获取已存在的issues
+          console.log('Fetching existing issues...');
+          let existingIssues = [];
+          try {
+            const output = execSync(`gh issue list --repo "${repo}" --label "gitalk" --state all --json title,body --limit 100`, { encoding: 'utf8' });
+            existingIssues = JSON.parse(output);
+            console.log(`Found ${existingIssues.length} existing issues`);
+          } catch (e) {
+            console.log('No existing issues found');
+          }
+
+          // 检查是否已存在某个页面的issue
+          function issueExists(pageId) {
+            return existingIssues.some(issue => 
+              issue.body && issue.body.includes(`for: ${pageId}`)
+            );
+          }
+
           // 创建标签
           const labels = [
             { name: 'gitalk', color: '0052CC', desc: 'Gitalk comments' },
@@ -43,21 +61,28 @@ jobs:
               execSync(`gh api --method POST -H "Accept: application/vnd.github+json" /repos/${repo}/labels -f name="${label.name}" -f color="${label.color}" -f description="${label.desc}"`, { stdio: 'ignore' });
               console.log(`Created label: ${label.name}`);
             } catch (e) {
-              console.log(`Label ${label.name} already exists`);
+              // 标签已存在
             }
           }
 
-          // 创建Links页面issue
-          console.log('Creating issue for Links page...');
-          try {
-            execSync(`gh issue create --repo "${repo}" --title "Gitalk: Links 页面评论" --body "This issue is used to store comments for: links" --label "gitalk,links"`, { stdio: 'ignore' });
-            console.log('Created issue for Links');
-          } catch (e) {
-            console.log('Issue for Links already exists');
+          let createdCount = 0;
+
+          // 创建Links页面issue（如果不存在）
+          if (!issueExists('links')) {
+            console.log('Creating issue for Links page...');
+            try {
+              execSync(`gh issue create --repo "${repo}" --title "Gitalk: Links 页面评论" --body "This issue is used to store comments for: links" --label "gitalk,links"`, { stdio: 'ignore' });
+              console.log('✓ Created issue for Links');
+              createdCount++;
+            } catch (e) {
+              console.log('✗ Failed to create issue for Links');
+            }
+          } else {
+            console.log('✓ Issue for Links already exists, skipping');
           }
 
           // 扫描_posts目录
-          console.log('Scanning posts directory...');
+          console.log('\nScanning posts directory...');
           const postsDir = 'source/_posts';
           if (fs.existsSync(postsDir)) {
             const files = fs.readdirSync(postsDir).filter(f => f.endsWith('.md'));
@@ -70,18 +95,25 @@ jobs:
               const titleMatch = content.match(/^title:\s*["']?([^"'\n]+)["']?/m);
               const title = titleMatch ? titleMatch[1].trim() : filename;
               
-              console.log(`Creating issue for post: ${title}`);
+              // 检查是否已存在
+              if (issueExists(filename)) {
+                console.log(`✓ Issue for post "${title}" already exists, skipping`);
+                continue;
+              }
+              
+              console.log(`Creating issue for new post: ${title}`);
               try {
                 execSync(`gh issue create --repo "${repo}" --title "Gitalk: ${title}" --body "This issue is used to store comments for: ${filename}" --label "gitalk,post"`, { stdio: 'ignore' });
-                console.log(`Created issue for ${filename}`);
+                console.log(`✓ Created issue for ${filename}`);
+                createdCount++;
               } catch (e) {
-                console.log(`Issue for ${filename} already exists`);
+                console.log(`✗ Failed to create issue for ${filename}`);
               }
             }
           }
 
           // 扫描其他页面
-          console.log('Scanning pages directory...');
+          console.log('\nScanning pages directory...');
           const sourceDir = 'source';
           if (fs.existsSync(sourceDir)) {
             const dirs = fs.readdirSync(sourceDir, { withFileTypes: true })
@@ -94,16 +126,23 @@ jobs:
                 const titleMatch = content.match(/^title:\s*["']?([^"'\n]+)["']?/m);
                 const title = titleMatch ? titleMatch[1].trim() : dir.name;
                 
-                console.log(`Creating issue for page: ${title}`);
+                // 检查是否已存在
+                if (issueExists(dir.name)) {
+                  console.log(`✓ Issue for page "${title}" already exists, skipping`);
+                  continue;
+                }
+                
+                console.log(`Creating issue for new page: ${title}`);
                 try {
                   execSync(`gh issue create --repo "${repo}" --title "Gitalk: ${title}" --body "This issue is used to store comments for: ${dir.name}" --label "gitalk,page"`, { stdio: 'ignore' });
-                  console.log(`Created issue for ${dir.name}`);
+                  console.log(`✓ Created issue for ${dir.name}`);
+                  createdCount++;
                 } catch (e) {
-                  console.log(`Issue for ${dir.name} already exists`);
+                  console.log(`✗ Failed to create issue for ${dir.name}`);
                 }
               }
             }
           }
 
-          console.log('Gitalk issues initialization completed!');
+          console.log(`\n✅ Gitalk issues initialization completed! Created ${createdCount} new issues.`);
           NODE_EOF
