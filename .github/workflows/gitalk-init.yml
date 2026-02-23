@@ -16,6 +16,34 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Create Labels
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          # 创建 gitalk 标签
+          gh api --method POST \
+            -H "Accept: application/vnd.github+json" \
+            /repos/${{ github.repository }}/labels \
+            -f name="gitalk" \
+            -f color="0052CC" \
+            -f description="Gitalk comments" || echo "Label gitalk may already exist"
+          
+          # 创建 links 标签
+          gh api --method POST \
+            -H "Accept: application/vnd.github+json" \
+            /repos/${{ github.repository }}/labels \
+            -f name="links" \
+            -f color="0E8A16" \
+            -f description="Links page" || echo "Label links may already exist"
+          
+          # 创建 post 标签
+          gh api --method POST \
+            -H "Accept: application/vnd.github+json" \
+            /repos/${{ github.repository }}/labels \
+            -f name="post" \
+            -f color="F9D0C4" \
+            -f description="Blog post" || echo "Label post may already exist"
+
       - name: Create Gitalk Issues
         env:
           GH_TOKEN: ${{ github.token }}
