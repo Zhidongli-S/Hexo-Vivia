@@ -72,6 +72,15 @@ comment:
     path: location.pathname
     lang:
     # 详见 https://github.com/imaegoo/twikoo
+  gitalk:
+    enable: true
+    owner: zhidongli-s
+    admin: zhidongli-s
+    repo: Hexo-Vivia
+    ClientID: Ov23li18WCkxfQsFRyWo
+    ClientSecret: f278b21b6b41fa4c268a8d9502371b1b0282200c
+    labels: 'gitalk'
+    distractionFreeMode: true
 
 #Analytics
 gauges_analytics: false

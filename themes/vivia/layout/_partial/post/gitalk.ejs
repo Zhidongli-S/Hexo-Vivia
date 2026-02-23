@@ -1,0 +1,32 @@
+<link rel="stylesheet" href="https://unpkg.com/gitalk@latest/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk@latest/dist/gitalk.min.js"></script>
+<script type="text/javascript">
+    document.addEventListener('DOMContentLoaded', function() {
+        var gitalkContainer = document.getElementById('gitalk-container');
+        if (!gitalkContainer) {
+            console.error('Gitalk container not found');
+            return;
+        }
+        
+        // 使用简单的字符串处理代替MD5
+        var path = location.pathname;
+        var id = path.replace(/\//g, '-').replace(/^-|-$/g, '') || 'index';
+        // 限制ID长度不超过50个字符（GitHub Issue标签限制）
+        if (id.length > 50) {
+            id = id.substring(0, 50);
+        }
+        
+        var gitalk = new Gitalk({
+            clientID: '<%- theme.comment.gitalk.ClientID %>',
+            clientSecret: '<%- theme.comment.gitalk.ClientSecret %>',
+            repo: '<%- theme.comment.gitalk.repo %>',
+            owner: '<%- theme.comment.gitalk.owner %>',
+            admin: ['<%- theme.comment.gitalk.admin %>'],
+            id: id,
+            distractionFreeMode: <%- theme.comment.gitalk.distractionFreeMode %>,
+            language: 'zh-CN'
+        });
+        
+        gitalk.render('gitalk-container');
+    });
+</script>
