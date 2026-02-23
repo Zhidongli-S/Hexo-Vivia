@@ -19,17 +19,22 @@ jobs:
       - name: Create Gitalk Issues
         env:
           GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
         run: |
           # 创建 Links 页面评论 Issue
+          echo "Creating issue for links page..."
           gh issue create \
-            --repo "${{ github.repository }}" \
+            --repo "$REPO" \
             --title "Gitalk: Links 页面评论" \
-            --body "This issue is used to store comments for: links\n\nPage ID: links" \
-            --label "gitalk,links" || echo "Issue for links may already exist"
+            --body "This issue is used to store comments for: links" \
+            --label "gitalk,links" || echo "Issue for links already exists"
           
           # 创建博客文章评论 Issue
+          echo "Creating issue for blog post..."
           gh issue create \
-            --repo "${{ github.repository }}" \
+            --repo "$REPO" \
             --title "Gitalk: 如何使用Hexo轻松构建一个博客网站" \
-            --body "This issue is used to store comments for: 2025-12-19-如何使用Hexo轻松构建一个博客网站\n\nPage ID: 2025-12-19-如何使用Hexo轻松构建一个博客网站" \
-            --label "gitalk,post" || echo "Issue for post may already exist"
+            --body "This issue is used to store comments for: 2025-12-19-如何使用Hexo轻松构建一个博客网站" \
+            --label "gitalk,post" || echo "Issue for post already exists"
+          
+          echo "Gitalk issues initialization completed!"
