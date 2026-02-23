@@ -4,6 +4,8 @@ title: 如何使用Hexo轻松构建一个博客网站
 date: 2025-12-19 22:11:29
 categories: 傻瓜教程
 description: 本文面向初学者，手把手教你使用 Hexo 静态博客框架从零搭建个人博客。只需安装 Node.js 和 Git，通过几条简单命令即可完成项目初始化、本地预览，远端部署，快速生成美观高效的静态网站。
+photos:
+  - https://hexo.io/icon/og-image-wide.png
 ---
 ### 什么是Hexo？
 Hexo 是一个快速、简洁且高效的博客框架。 Hexo 使用 Markdown（或其他标记语言）解析文章，在几秒内，即可利用靓丽的主题生成静态网页。
@@ -51,7 +53,40 @@ hexo server
 
 ---
 
-### 4. 创建 GitHub 仓库
+### 5. 更换主题
+
+Hexo 默认使用 Landscape 主题，你可以更换为其他主题来个性化你的博客。以下以更换为 Vivia 主题为例：
+
+1. 在项目根目录下执行命令安装主题：
+
+```bash
+git clone https://github.com/adamralph/vivia.git themes/vivia
+```
+
+2. 复制主题配置文件：
+
+```bash
+cp themes/vivia/_config.vivia.yml _config.vivia.yml
+```
+
+3. 修改 Hexo 配置文件 `_config.yml`，将主题设置为 vivia：
+
+```yaml
+theme: vivia
+```
+
+4. 重新启动本地服务器查看效果：
+
+```bash
+hexo clean
+hexo server
+```
+
+> 更多主题可访问 [Hexo 官方主题库](https://hexo.io/themes/) 查找和安装。
+
+---
+
+### 6. 创建 GitHub 仓库
 
 将项目托管至 GitHub。具体操作步骤如下：
 
@@ -76,7 +111,7 @@ git push -u origin main
 
 ---
 
-### 5. 部署至 Cloudflare Pages
+### 7. 部署至 Cloudflare Pages
 
 完成 GitHub 托管后，可通过 Cloudflare Pages 实现自动化部署。该服务提供免费的静态网站托管，并支持自定义域名。
 
