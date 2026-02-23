@@ -1,17 +1,17 @@
 <link rel="stylesheet" href="https://unpkg.com/gitalk@latest/dist/gitalk.css">
 <style>
-  /* Gitalk 样式 - 完全仿照第三张图 */
+  /* Gitalk 样式 - 完全仿照参考图 */
   .gt-container {
     background: #ffffff !important;
-    border: 1px solid #d0d7de !important;
-    border-radius: 6px !important;
+    border-radius: 8px !important;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1) !important;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif !important;
   }
   
   /* 头部输入区域 */
   .gt-container .gt-header {
     padding: 16px !important;
-    border-bottom: 1px solid #d8dee4 !important;
+    border-bottom: 1px solid #e1e4e8 !important;
   }
   
   .gt-container .gt-header-comment {
@@ -33,19 +33,44 @@
     border-radius: 50% !important;
   }
   
-  /* 输入框区域 */
+  /* 输入框容器 */
   .gt-container .gt-header-controls {
     flex: 1 !important;
-    position: relative !important;
+    border: 1px solid #d0d7de !important;
+    border-radius: 6px !important;
+    overflow: hidden !important;
   }
   
+  /* 标签栏 */
+  .gt-container .gt-header-controls-tabs {
+    display: flex !important;
+    background: #f6f8fa !important;
+    border-bottom: 1px solid #d0d7de !important;
+  }
+  
+  .gt-container .gt-header-controls-tab {
+    padding: 8px 16px !important;
+    font-size: 14px !important;
+    color: #24292f !important;
+    background: #f6f8fa !important;
+    border: none !important;
+    border-bottom: 2px solid transparent !important;
+    cursor: pointer !important;
+  }
+  
+  .gt-container .gt-header-controls-tab.active {
+    background: #ffffff !important;
+    border-bottom-color: #fd8c73 !important;
+    font-weight: 600 !important;
+  }
+  
+  /* 输入框 */
   .gt-container .gt-header-textarea {
     width: 100% !important;
     min-height: 100px !important;
     padding: 12px !important;
     background: #f6f8fa !important;
-    border: 1px solid #d0d7de !important;
-    border-radius: 6px !important;
+    border: none !important;
     font-size: 14px !important;
     color: #24292f !important;
     resize: vertical !important;
@@ -53,56 +78,69 @@
   
   .gt-container .gt-header-textarea:focus {
     background: #ffffff !important;
-    border-color: #0969da !important;
     outline: none !important;
-    box-shadow: 0 0 0 3px rgba(9, 105, 218, 0.3) !important;
   }
   
-  /* 预览按钮 */
-  .gt-container .gt-header-controls .gt-btn-preview {
+  .gt-container .gt-header-textarea::placeholder {
+    color: #8c959f !important;
+  }
+  
+  /* Markdown图标 */
+  .gt-container .gt-header-controls-hint {
     position: absolute !important;
-    top: 8px !important;
+    bottom: 8px !important;
     right: 8px !important;
-    background: transparent !important;
-    border: none !important;
-    color: #57606a !important;
+    color: #8c959f !important;
     font-size: 12px !important;
-    padding: 4px 8px !important;
   }
   
-  /* 底部按钮区域 */
-  .gt-container .gt-header-controls .gt-svg {
-    display: none !important;
+  /* 底部工具栏 */
+  .gt-container .gt-header-controls-footer {
+    display: flex !important;
+    justify-content: flex-end !important;
+    align-items: center !important;
+    padding: 8px 16px !important;
+    background: #f6f8fa !important;
+    border-top: 1px solid #d0d7de !important;
+    gap: 8px !important;
   }
   
   /* 登录按钮 - 绿色 */
   .gt-container .gt-btn-login {
-    float: right !important;
-    margin-top: 8px !important;
     background: #2da44e !important;
     border: 1px solid rgba(27, 31, 36, 0.15) !important;
     color: #ffffff !important;
     font-size: 14px !important;
     font-weight: 500 !important;
-    padding: 5px 16px !important;
+    padding: 6px 16px !important;
     border-radius: 6px !important;
     cursor: pointer !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 6px !important;
   }
   
   .gt-container .gt-btn-login:hover {
     background: #2c974b !important;
   }
   
-  /* 评论列表 */
-  .gt-container .gt-comments {
-    padding: 0 16px !important;
+  .gt-container .gt-btn-login svg {
+    width: 16px !important;
+    height: 16px !important;
+    fill: currentColor !important;
   }
   
+  /* 评论列表 */
+  .gt-container .gt-comments {
+    padding: 0 !important;
+  }
+  
+  /* 单个评论卡片 */
   .gt-container .gt-comment {
     display: flex !important;
     gap: 12px !important;
-    padding: 16px 0 !important;
-    border-bottom: 1px solid #d8dee4 !important;
+    padding: 16px !important;
+    border-bottom: 1px solid #e1e4e8 !important;
   }
   
   .gt-container .gt-comment:last-child {
@@ -115,7 +153,10 @@
   }
   
   .gt-container .gt-comment-header {
-    margin-bottom: 4px !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+    margin-bottom: 8px !important;
   }
   
   .gt-container .gt-comment-username {
@@ -130,56 +171,86 @@
   }
   
   .gt-container .gt-comment-date {
-    color: #57606a !important;
+    color: #8c959f !important;
     font-size: 12px !important;
-    margin-left: 8px !important;
+  }
+  
+  /* 所有者标签 */
+  .gt-container .gt-comment-owner {
+    display: inline-block !important;
+    padding: 2px 6px !important;
+    background: #ddf4ff !important;
+    color: #0969da !important;
+    font-size: 11px !important;
+    font-weight: 500 !important;
+    border-radius: 10px !important;
+    border: 1px solid #b6e3ff !important;
   }
   
   .gt-container .gt-comment-text {
     color: #24292f !important;
     font-size: 14px !important;
     line-height: 1.5 !important;
+    margin-bottom: 8px !important;
   }
   
-  /* 评论操作按钮 */
+  /* 评论操作栏 */
   .gt-container .gt-comment-actions {
-    margin-top: 8px !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 16px !important;
   }
   
-  .gt-container .gt-comment-actions a {
+  .gt-container .gt-comment-actions button {
+    display: flex !important;
+    align-items: center !important;
+    gap: 4px !important;
+    padding: 4px 8px !important;
+    background: #f6f8fa !important;
+    border: 1px solid #d0d7de !important;
+    border-radius: 20px !important;
     color: #57606a !important;
     font-size: 12px !important;
-    margin-right: 16px !important;
-    text-decoration: none !important;
+    cursor: pointer !important;
   }
   
-  .gt-container .gt-comment-actions a:hover {
-    color: #0969da !important;
+  .gt-container .gt-comment-actions button:hover {
+    background: #f3f4f6 !important;
   }
   
-  /* 回复 */
+  .gt-container .gt-comment-actions svg {
+    width: 14px !important;
+    height: 14px !important;
+  }
+  
+  .gt-container .gt-comment-reply-count {
+    margin-left: auto !important;
+    color: #57606a !important;
+    font-size: 12px !important;
+  }
+  
+  /* 回复列表 */
   .gt-container .gt-comment-replies {
     margin-top: 12px !important;
     margin-left: 52px !important;
+    padding-left: 12px !important;
+    border-left: 2px solid #d0d7de !important;
   }
   
   .gt-container .gt-comment-reply {
     display: flex !important;
-    gap: 12px !important;
+    gap: 8px !important;
     padding: 12px 0 !important;
-    border-top: 1px solid #d8dee4 !important;
   }
   
-  /* 加载更多 */
-  .gt-container .gt-comments-loadmore {
-    text-align: center !important;
-    padding: 16px !important;
+  .gt-container .gt-comment-reply .gt-avatar {
+    width: 32px !important;
+    height: 32px !important;
   }
   
-  .gt-container .gt-comments-loadmore .gt-btn-loadmore {
-    color: #0969da !important;
-    font-size: 14px !important;
-    text-decoration: none !important;
+  .gt-container .gt-comment-reply .gt-avatar img {
+    width: 32px !important;
+    height: 32px !important;
   }
   
   /* 初始化提示 */
@@ -199,14 +270,10 @@
     text-decoration: none !important;
   }
   
-  .gt-container .gt-no-init a:hover {
-    text-decoration: underline !important;
-  }
-  
   /* 底部 */
   .gt-container .gt-footer {
     padding: 16px !important;
-    border-top: 1px solid #d8dee4 !important;
+    border-top: 1px solid #e1e4e8 !important;
     text-align: center !important;
   }
   
@@ -222,13 +289,6 @@
     border: 1px solid #d0d7de !important;
     border-radius: 6px !important;
     box-shadow: 0 8px 24px rgba(140, 149, 159, 0.2) !important;
-  }
-  
-  /* 表情选择器 */
-  .gt-container .gt-emoji-picker {
-    background: #ffffff !important;
-    border: 1px solid #d0d7de !important;
-    border-radius: 6px !important;
   }
 </style>
 <script src="https://unpkg.com/gitalk@latest/dist/gitalk.min.js"></script>
@@ -256,8 +316,7 @@
             admin: ['<%- theme.comment.gitalk.admin %>'],
             id: id,
             distractionFreeMode: <%- theme.comment.gitalk.distractionFreeMode %>,
-            language: 'zh-CN',
-            proxy: 'https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token'
+            language: 'zh-CN'
         });
         
         gitalk.render('gitalk-container');
