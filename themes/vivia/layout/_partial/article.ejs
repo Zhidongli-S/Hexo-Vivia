@@ -105,13 +105,4 @@
   </script>
   <% } %>
 
-<% if (!index && theme.comment.gitalk && theme.comment.gitalk.enable) { %>
-  <div id="comment-card" class="comment-card">
-    <div class="main-title-bar">
-      <div class="main-title-dot"></div>
-      <div class="main-title"><%= __('comment') %> </div>
-    </div>
-    <div id="gitalk-container"></div>
-  </div>
-  <%- partial('post/gitalk') %>
-<% } %>
+
