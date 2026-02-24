@@ -8,7 +8,7 @@
         clientSecret: '<%= theme.gitalk.ClientSecret %>',
         repo: '<%= theme.gitalk.repo %>',
         owner: '<%= theme.gitalk.owner %>',
-        admin: '<%= theme.gitalk.adminUser %>',
+        admin: <%- JSON.stringify(theme.gitalk.adminUser) %>,
         id: md5(location.pathname),
         labels: '<%= theme.gitalk.labels %>'.split(',').filter(l => l),
         perPage: <%= theme.gitalk.perPage %>,

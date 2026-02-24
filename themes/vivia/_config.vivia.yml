@@ -21,7 +21,7 @@ banner:
 hue: 250                         # 主题色调 (例如：红: 0，橙: 60，蓝：260，紫：300，粉：345)
 
 # 个人信息
-avatar: /OIP-C.webp
+avatar: https://avatars.githubusercontent.com/u/240259469?
 author: 枝动力
 subtitle: 渺渺星海,唯我独芒！
 links:
@@ -78,8 +78,8 @@ gitalk:
   ClientID: Ov23li18WCkxfQsFRyWo #Client ID
   ClientSecret: f278b21b6b41fa4c268a8d9502371b1b0282200c #Client Secret
   repo: Hexo-Vivia #你要存放的项目名
-  owner: Zhidongli-s #这个项目名的拥有者（GitHub账号或组织）
-  adminUser: ['Zhidongli-s'] #管理员用户
+  owner: Zhidongli-S #这个项目名的拥有者（GitHub账号或组织）
+  adminUser: ['Zhidongli-S'] #管理员用户
   ID: location.pathname #页面ID
   labels: ['Gitalk'] #GitHub issues的标签
   perPage: 10 #每页多少个评论
