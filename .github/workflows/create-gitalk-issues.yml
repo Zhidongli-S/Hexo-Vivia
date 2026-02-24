@@ -1,0 +1,140 @@
+name: Create Gitalk Issues
+
+on:
+  push:
+    branches: [ main, master ]
+    paths:
+      - 'source/_posts/**'
+      - 'source/_pages/**'
+
+jobs:
+  create-issues:
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+      contents: read
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+    
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+    
+    - name: Install dependencies
+      run: npm install
+    
+    - name: Generate site and extract post info
+      id: extract
+      run: |
+        # 安装 hexo
+        npm install -g hexo-cli
+        
+        # 生成静态站点
+        hexo generate
+        
+        # 提取文章信息
+        node -e "
+        const fs = require('fs');
+        const path = require('path');
+        const crypto = require('crypto');
+        
+        // 读取 public 目录下的所有 HTML 文件
+        function getAllHtmlFiles(dir, files = []) {
+          const items = fs.readdirSync(dir);
+          for (const item of items) {
+            const fullPath = path.join(dir, item);
+            const stat = fs.statSync(fullPath);
+            if (stat.isDirectory()) {
+              getAllHtmlFiles(fullPath, files);
+            } else if (item.endsWith('.html') && item !== 'index.html') {
+              files.push(fullPath);
+            }
+          }
+          return files;
+        }
+        
+        const publicDir = 'public';
+        if (!fs.existsSync(publicDir)) {
+          console.log('Public directory not found');
+          process.exit(0);
+        }
+        
+        const htmlFiles = getAllHtmlFiles(publicDir);
+        const posts = [];
+        
+        for (const file of htmlFiles) {
+          const content = fs.readFileSync(file, 'utf-8');
+          
+          // 提取标题
+          const titleMatch = content.match(/<title>([^<]+)<\/title>/);
+          const title = titleMatch ? titleMatch[1].replace(/\\s*\\|\\s*Hexo$/, '') : 'Untitled';
+          
+          // 计算路径的 MD5（与 Gitalk 一致）
+          const relativePath = file.replace(publicDir, '').replace(/index\\.html$/, '');
+          const id = crypto.createHash('md5').update(relativePath).digest('hex');
+          
+          posts.push({
+            title: title,
+            path: relativePath,
+            id: id
+          });
+        }
+        
+        fs.writeFileSync('posts.json', JSON.stringify(posts, null, 2));
+        console.log('Found', posts.length, 'posts');
+        console.log(JSON.stringify(posts, null, 2));
+        "
+    
+    - name: Create GitHub Issues for new posts
+      uses: actions/github-script@v7
+      with:
+        script: |
+          const fs = require('fs');
+          
+          // 读取文章列表
+          const posts = JSON.parse(fs.readFileSync('posts.json', 'utf-8'));
+          
+          // 获取所有已存在的 Issue
+          const { data: existingIssues } = await github.rest.issues.listForRepo({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            state: 'all',
+            labels: 'Gitalk',
+            per_page: 100
+          });
+          
+          // 提取已存在的 Issue 标题
+          const existingTitles = existingIssues.map(issue => issue.title);
+          
+          // 为每个文章创建 Issue（如果不存在）
+          for (const post of posts) {
+            const issueTitle = `Gitalk: ${post.title}`;
+            
+            if (existingTitles.includes(issueTitle)) {
+              console.log(`Issue already exists for: ${post.title}`);
+              continue;
+            }
+            
+            try {
+              await github.rest.issues.create({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                title: issueTitle,
+                body: `This issue is for comments on the post: **${post.title}**
+                
+                Path: ${post.path}
+                ID: ${post.id}
+                
+                Please do not delete this issue. It is used by Gitalk for storing comments.`,
+                labels: ['Gitalk']
+              });
+              console.log(`Created issue for: ${post.title}`);
+            } catch (error) {
+              console.error(`Failed to create issue for ${post.title}:`, error.message);
+            }
+          }
