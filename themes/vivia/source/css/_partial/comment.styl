@@ -127,3 +127,275 @@
 .tk-comments-container .tk-submit
   position: relative
   left: -70px
+
+// Gitalk 评论样式 - 完全自定义以匹配主题
+.gt-container
+  max-width: 100%
+  margin: 32px 0 0 0
+  padding: 0
+
+  // 头部区域
+  .gt-header
+    border-bottom: none
+    margin-bottom: 24px
+    position: relative
+
+    &::after
+      content: ''
+      position: absolute
+      bottom: 0
+      left: 0
+      right: 0
+      height: 1px
+      background: var(--neut-L10)
+
+  // 头像
+  .gt-avatar
+    img
+      border-radius: 50%
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1)
+
+  // 输入框区域
+  .gt-header-textarea
+    background-color: var(--input-field) !important
+    color: var(--neut-L90) !important
+    border: 1px solid transparent !important
+    border-radius: inner-radius !important
+    padding: 16px !important
+    font-size: 14px !important
+    line-height: 1.6 !important
+    min-height: 100px !important
+    transition: all 0.2s ease !important
+
+    &:focus
+      border-color: var(--primary) !important
+      outline: none !important
+
+    &::placeholder
+      color: var(--neut-L30) !important
+
+  // 预览区域
+  .gt-header-preview
+    background-color: var(--card-background) !important
+    border: 1px solid var(--neut-L10) !important
+    border-radius: inner-radius !important
+    padding: 16px !important
+    color: var(--neut-L90) !important
+
+  // 控制按钮区域
+  .gt-header-controls
+    margin-top: 16px
+    display: flex
+    justify-content: flex-end
+    align-items: center
+
+  // 所有按钮基础样式
+  .gt-btn
+    border: none !important
+    border-radius: inner-radius !important
+    padding: 8px 20px !important
+    font-size: 14px !important
+    font-weight: 500 !important
+    cursor: pointer !important
+    transition: all 0.2s ease !important
+
+  // 预览按钮
+  .gt-btn-preview
+    background-color: var(--btn-bg) !important
+    color: var(--btn-content) !important
+    margin-right: 12px !important
+
+    &:hover
+      background-color: var(--btn-hover) !important
+
+    &:active
+      background-color: var(--btn-active) !important
+
+  // 发布/登录按钮
+  .gt-btn-public,
+  .gt-btn-login
+    background-color: var(--primary-btn-bg) !important
+    color: var(--primary-btn-text) !important
+
+    &:hover
+      filter: brightness(1.1)
+
+    &:active
+      filter: brightness(0.95)
+
+  // 元信息区域
+  .gt-meta
+    border-bottom: 1px solid var(--neut-L10) !important
+    padding-bottom: 16px !important
+    margin-bottom: 24px !important
+
+  .gt-counts
+    color: var(--neut-L75) !important
+    font-size: 14px !important
+
+  // 评论列表
+  .gt-comments
+    margin-top: 24px
+
+  .gt-comment
+    border-top: 1px solid var(--neut-L10) !important
+    padding: 20px 0 !important
+    margin: 0 !important
+
+    &:first-child
+      border-top: none !important
+
+  .gt-comment-content
+    background-color: transparent !important
+    border-radius: 0 !important
+    box-shadow: none !important
+    margin-left: 60px !important
+
+  .gt-comment-header
+    color: var(--neut-L50) !important
+    font-size: 13px !important
+    margin-bottom: 8px !important
+
+    .gt-comment-username
+      color: var(--primary) !important
+      font-weight: 600 !important
+      font-size: 14px !important
+
+  .gt-comment-text
+    color: var(--neut-L75) !important
+    font-size: 14px !important
+    line-height: 1.6 !important
+
+  .gt-comment-body
+    color: var(--neut-L90) !important
+    font-size: 14px !important
+    line-height: 1.8 !important
+
+    p
+      margin: 0 0 12px 0 !important
+
+      &:last-child
+        margin-bottom: 0 !important
+
+  .gt-comment-edit,
+  .gt-comment-reply
+    color: var(--primary) !important
+    font-size: 13px !important
+    margin-left: 12px !important
+    opacity: 0.8
+
+    &:hover
+      opacity: 1
+      text-decoration: underline !important
+
+  // 链接样式
+  .gt-link
+    color: var(--primary) !important
+    border-bottom: none !important
+    text-decoration: none !important
+
+    &:hover
+      text-decoration: underline !important
+
+  .gt-link-counts,
+  .gt-link-project
+    color: var(--primary) !important
+
+  // 图标
+  .gt-svg svg
+    fill: var(--primary) !important
+
+  .gt-ico-text
+    color: var(--neut-L75) !important
+    font-size: 13px !important
+
+  // 弹出层
+  .gt-popup
+    background-color: var(--card-background) !important
+    border: 1px solid var(--neut-L10) !important
+    border-radius: inner-radius !important
+    box-shadow: 0 4px 20px rgba(0,0,0,0.15) !important
+
+  // 版权信息
+  .gt-copyright
+    border-top: 1px solid var(--neut-L10) !important
+    margin-top: 32px !important
+    padding-top: 16px !important
+    font-size: 13px !important
+    color: var(--neut-L50) !important
+
+    a
+      color: var(--primary) !important
+
+  // 加载状态
+  .gt-loading
+    color: var(--neut-L50) !important
+    font-size: 14px !important
+    padding: 40px 0 !important
+
+  // 未初始化状态
+  .gt-no-init
+    text-align: center !important
+    padding: 48px 20px !important
+    color: var(--neut-L50) !important
+
+    p
+      margin: 0 0 12px 0 !important
+      font-size: 14px !important
+      line-height: 1.6 !important
+
+    a
+      color: var(--primary) !important
+      text-decoration: none !important
+
+      &:hover
+        text-decoration: underline !important
+
+  // 分页样式
+  .gt-pagination
+    margin-top: 32px !important
+    text-align: center !important
+
+    .gt-btn-page
+      background-color: var(--btn-bg) !important
+      color: var(--btn-content) !important
+      border: none !important
+      margin: 0 4px !important
+      min-width: 36px !important
+      height: 36px !important
+      line-height: 36px !important
+      padding: 0 !important
+      border-radius: inner-radius !important
+
+      &:hover
+        background-color: var(--btn-hover) !important
+
+    .gt-current
+      background-color: var(--primary) !important
+      color: var(--primary-btn-text) !important
+
+  // 表情选择器
+  .gt-emoji-picker
+    background-color: var(--card-background) !important
+    border: 1px solid var(--neut-L10) !important
+    border-radius: inner-radius !important
+    box-shadow: 0 4px 20px rgba(0,0,0,0.15) !important
+
+  .gt-emoji-picker-item
+    &:hover
+      background-color: var(--btn-hover) !important
+      border-radius: 4px !important
+
+  // 用户相关
+  .gt-user
+    color: var(--neut-L90) !important
+    font-size: 14px !important
+
+    .gt-ico svg
+      fill: var(--neut-L90) !important
+
+  // 错误提示
+  .gt-error
+    color: #ff6b6b !important
+    text-align: center !important
+    padding: 20px !important
