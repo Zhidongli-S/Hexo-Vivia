@@ -1,0 +1,5 @@
+# Cloudflare Pages 构建配置
+# 此文件用于覆盖默认配置，确保在 Cloudflare Pages 上正确构建
+
+url: https://zhidongli.top
+root: /
