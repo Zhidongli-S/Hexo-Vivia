@@ -1,44 +1,7 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1.7.2/dist/gitalk.css">
+<link rel="stylesheet" href="/css/gitalk-custom.css">
 <script src="https://cdn.jsdelivr.net/npm/gitalk@1.7.2/dist/gitalk.min.js"></script>
 <script src="https://cdn.bootcss.com/blueimp-md5/2.10.0/js/md5.js"></script>
-<!-- 强制覆盖 Gitalk 登录后 UI 变化，保持与未登录时一致 -->
-<style>
-  /* 1. 统一管理员评论背景色 */
-  .gt-container .gt-comment-admin .gt-comment-content {
-    background-color: transparent !important;
-    box-shadow: none !important;
-  }
-  
-  /* 2. 强制所有评论使用 gt-comment-block-1 宽度（防止用户名偏移） */
-  .gt-container .gt-comment-block-1,
-  .gt-container .gt-comment-block-2 {
-    width: 2em !important;
-  }
-  
-  /* 3. 隐藏登录后的用户头像，保持显示 GitHub 图标 */
-  .gt-container .gt-header-avatar {
-    display: none !important;
-  }
-  
-  /* 4. 始终显示 GitHub 登录图标 */
-  .gt-container .gt-avatar-github {
-    display: inline-block !important;
-  }
-  
-  /* 5. 统一按钮样式 - 始终显示回复图标，隐藏编辑图标 */
-  .gt-container .gt-comment-edit {
-    display: none !important;
-  }
-  
-  .gt-container .gt-comment-reply {
-    display: inline-flex !important;
-  }
-  
-  /* 6. 隐藏右上角用户信息区域 */
-  .gt-container .gt-user {
-    display: none !important;
-  }
-</style>
 <div id="gitalk-container"></div>
 <script type="text/javascript">
       var gitalk = new Gitalk({

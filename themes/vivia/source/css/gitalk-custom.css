@@ -1,0 +1,37 @@
+/* Gitalk 自定义样式 - 统一登录前后 UI */
+
+/* 1. 统一管理员评论背景色为透明 */
+.gt-container .gt-comment-admin .gt-comment-content {
+  background-color: transparent !important;
+  box-shadow: none !important;
+}
+
+/* 2. 强制所有评论块使用相同宽度（防止用户名偏移） */
+.gt-container .gt-comment-block-1,
+.gt-container .gt-comment-block-2 {
+  width: 2em !important;
+}
+
+/* 3. 隐藏登录后的用户头像，始终显示 GitHub 图标 */
+.gt-container .gt-header-avatar {
+  display: none !important;
+}
+
+/* 4. 确保 GitHub 图标始终可见 */
+.gt-container .gt-avatar-github {
+  display: inline-block !important;
+}
+
+/* 5. 始终显示回复按钮，隐藏编辑按钮 */
+.gt-container .gt-comment-edit {
+  display: none !important;
+}
+
+.gt-container .gt-comment-reply {
+  display: inline-flex !important;
+}
+
+/* 6. 隐藏右上角用户信息区域 */
+.gt-container .gt-user {
+  display: none !important;
+}
