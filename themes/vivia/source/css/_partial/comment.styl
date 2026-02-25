@@ -229,16 +229,7 @@
     align-items: center !important
 
     .gt-comment-block-1
-      display: block !important
-      width: 2em !important
-      height: 1.375em !important
-      float: right !important
-
-    .gt-comment-block-2
-      display: block !important
-      width: 2em !important
-      height: 1.375em !important
-      float: right !important
+      display: none !important
 
     .gt-comment-username
       color: var(--primary) !important
@@ -440,12 +431,7 @@
   .gt-user
     display: none !important
 
-  // 隐藏 GitHub 头像按钮
-  .gt-avatar-github
-    display: none !important
-
   // 统一管理员/自己的评论样式与普通评论一致
-  // 使用更高优先级选择器覆盖 Gitalk 默认样式
   .gt-comment-admin
     .gt-comment-content
       background-color: transparent !important
