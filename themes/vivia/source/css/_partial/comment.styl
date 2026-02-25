@@ -436,8 +436,10 @@
     display: none !important
 
   // 统一管理员/自己的评论样式与普通评论一致
+  // 使用更高优先级选择器覆盖 Gitalk 默认样式
   .gt-comment-admin
     .gt-comment-content
+      background-color: transparent !important
       background: transparent !important
       box-shadow: none !important
 
