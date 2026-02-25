@@ -1,400 +1,310 @@
-// Valine
-.comment-card
-  @extend $card
-  padding: article-top-padding article-side-padding 0 article-side-padding
-  *
-    transition: none
-  .title-bar
-    margin-bottom: 24px
-  .main-title
-    @extend $main-title
-  #vcomments
-    margin-top: 16px
-  .vimg
-    border-radius: inner-radius !important
-    border: none !important
-  .vat
-    color: var(--primary) !important
-  .vwrap
-    padding: 0 !important
-    border: none !important
-  .item3
+// Gitalk GitHub 风格 UI 设计 - 强制覆盖所有默认样式
+
+.gt-container
+  color: var(--neut-L90) !important
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif !important
+  background-color: transparent !important
+
+  // 头部输入区域
+  .gt-header
+    border: 1px solid var(--neut-L10) !important
+    border-radius: 6px !important
+    padding: 16px !important
+    background-color: var(--card-background) !important
+    margin-bottom: 16px !important
     display: flex !important
     gap: 12px !important
-    margin-bottom: 12px !important
-    input
-      background: var(--input-field) !important
-      border-radius: inner-radius !important
-      padding-left: 16px !important
-      border-bottom: none !important
-  .vedit
-    background: var(--input-field) !important
-    border-radius: inner-radius !important
-    padding: 16px !important
-    margin-bottom: 12px !important
-    transition: background trans-style
-  .vinput
-    font-size: 14px !important
-    color: var(--neut-L75) !important
-    transition: background trans-style
-  ::placeholder
-    color: var(--neut-L30)
-  svg
-    path
-      fill: var(--primary)
-  .vsubmit
-    height: 32px
-    min-width: 80px
-    border: none !important
-    background: var(--primary-btn-bg) !important
-    color: var(--primary-btn-text) !important
-    border-radius: inner-radius !important
-    font-size: 14px !important
-    font-weight: bold !important
-  .vrow
-    padding: 0 !important
-  .vcount
-    color: var(--neut-L50) !important
-  .vhead
-    .vnick
-      color: var(--neut-L90) !important
-      &:hover
-        color: var(--primary) !important
-  .vcontent
-    p
-      color: var(--neut-L75) !important  
-  a
-    &:hover
-      color: var(--primary) !important
-  .vquote
-    border-left: none !important
-  .vpower
-    font-size: 14px !important
-    padding: 0 !important
-    padding-bottom: 24px !important
-    line-height: 14px !important
-    a
-      font-size: 14px !important
-      color: var(--link) !important
-  .vh
-    border-bottom: none !important
-  .vcard
-    padding-top: 8px !important
-  .vemojis
-    margin-top: 12px !important
-  .vempty
-    color: var(--neut-L30) !important
-//Twikoo
-//修复文字颜色
-.el-input-group__prepend,
-.tk-comments-count,
-.tk-nick.tk-nick-link,
-.tk-time,
-.tk-content,
-.el-input__count,
-.el-button.tk-preview.el-button--default.el-button--small,
-.el-button.tk-cancel.el-button--default.el-button--small,
-.el-input__inner,
-.tk-input.el-textarea,
-.tk-preview-container,
-.tk-actions,
-.tk-comments-no
-  color: var(--neut-L90) !important
-//修复排版问题
-.tk-admin-comment-filter-type
-  text-align: center
-.tk-footer
-  padding-bottom: 2em
-// 修复图片出框
-.tk-content img
-  max-width: 100% !important
-// 修复过长文本出框
-.tk-content pre
-  white-space: pre-wrap
-  word-wrap: break-word
-// 优化超链接配色
-.tk-footer
-  a
-    color: var(--link) !important
-// 头像宽度调整 rem 单位与全局字体大小挂钩
-.tk-replies .tk-avatar
-  width: 2.5rem !important
-  height: 2.5rem !important
-.tk-replies .tk-avatar img
-  width: 2.5rem !important
-  height: 2.5rem !important
-// 回复框左移，避免窄屏时出框
-.tk-comments-container .tk-submit
-  position: relative
-  left: -70px
 
-// Gitalk 评论样式 - 使用 Vivia 主题原生风格
-.gt-container
-  margin-top: 32px
-  padding: 0 article-side-padding
-  color: var(--neut-L90) !important
-  @media mq-mobile
-    padding: 0 mobile-article-side-padding
-
-  // 头部区域 - 使用卡片样式
-  .gt-header
-    @extend $card
-    padding: 24px
-    margin-bottom: block-margin
-
-  // 头像
-  .gt-avatar
-    img
-      border-radius: 50%
-      width: 44px
-      height: 44px
-
-  // 输入框区域
+  // 输入框
   .gt-header-textarea
-    background: var(--input-field) !important
-    border: none !important
-    border-radius: inner-radius !important
-    padding: 16px !important
+    background-color: var(--input-field) !important
     color: var(--neut-L90) !important
+    border: 1px solid var(--neut-L10) !important
+    border-radius: 6px !important
+    padding: 12px !important
     font-size: 14px !important
-    line-height: 1.6 !important
+    line-height: 1.5 !important
     min-height: 100px !important
-    transition: background trans-style !important
 
-    &::placeholder
-      color: var(--neut-L30) !important
+    &:focus
+      border-color: var(--primary) !important
+      outline: none !important
+      box-shadow: 0 0 0 3px var(--link-hover-bg) !important
 
   // 预览区域
   .gt-header-preview
-    background: var(--input-field) !important
-    border-radius: inner-radius !important
-    padding: 16px !important
+    background-color: var(--input-field) !important
     color: var(--neut-L90) !important
+    border: 1px solid var(--neut-L10) !important
+    border-radius: 6px !important
+    padding: 12px !important
 
-  // 按钮使用主题样式
+  // 按钮基础样式
   .gt-btn
-    @extend $text-btn
-    border: none !important
-
-  .gt-btn-public
-  .gt-btn-login
-    background: var(--primary-btn-bg) !important
-    color: var(--primary-btn-text) !important
+    border-radius: 6px !important
+    font-size: 14px !important
+    font-weight: 500 !important
+    padding: 6px 12px !important
+    border: 1px solid var(--neut-L10) !important
+    background-color: var(--btn-bg) !important
+    color: var(--btn-content) !important
+    cursor: pointer !important
+    transition: all 0.2s ease !important
 
     &:hover
-      filter: brightness(1.1)
+      background-color: var(--btn-hover) !important
 
-  // 隐藏 Markdown 提示链接
-  .gt-header-controls-tip
-    display: none !important
+  // 登录按钮 - GitHub 绿色
+  .gt-btn-login
+    background-color: #2da44e !important
+    color: white !important
+    border-color: rgba(27, 31, 36, 0.15) !important
+
+    &:hover
+      background-color: #2c974b !important
+
+  // 发表评论按钮 - GitHub 绿色
+  .gt-btn-public
+    background-color: #2da44e !important
+    color: white !important
+    border-color: rgba(27, 31, 36, 0.15) !important
+
+    &:hover
+      background-color: #2c974b !important
 
   // 评论列表
   .gt-comments
-    margin-top: block-margin
+    margin-top: 0 !important
 
-  // 单条评论 - 使用卡片样式
+  // 单条评论 - 带边框卡片
   .gt-comment
-    @extend $card
-    padding: 20px 24px !important
-    margin-bottom: block-margin !important
-    border-top: none !important
-    position: relative !important
+    border: 1px solid var(--neut-L10) !important
+    border-radius: 6px !important
+    padding: 12px 16px !important
+    background-color: var(--card-background) !important
+    margin-bottom: 16px !important
+    display: flex !important
+    gap: 7px !important
 
-    &:first-child
-      margin-top: 0 !important
+    &:last-child
+      margin-bottom: 0 !important
 
+    &:hover
+      background-color: var(--card-background) !important
+
+    // 移除点击高亮
+    &:active
+      background-color: var(--card-background) !important
+
+  // 评论内容区域
   .gt-comment-content
-    background: transparent !important
+    background-color: transparent !important
     box-shadow: none !important
-    margin-left: 70px !important
+    margin-left: 0 !important
+    flex-grow: 1 !important
+    flex-shrink: 1 !important
+    flex-basis: 0 !important
+    min-width: 0 !important
 
-  // 评论头像样式 - 方形头像，下移并放大
+    // 移除内容区域的高亮
+    &:hover
+      background-color: transparent !important
+
+  // 评论头像 - 放大到 56px
   .gt-comment-avatar
-    position: absolute !important
-    top: 28px !important
-    left: 24px !important
     width: 56px !important
     height: 56px !important
+    flex-shrink: 0 !important
 
     img
       width: 56px !important
       height: 56px !important
-      border-radius: inner-radius !important
+      border-radius: 8px !important
 
+  // 评论头部 - 所有元素在同一行对齐
   .gt-comment-header
     color: var(--neut-L75) !important
     font-size: 14px !important
-    margin-bottom: 8px !important
+    margin-bottom: 4px !important
     display: flex !important
-    align-items: center !important
+    align-items: baseline !important
+    gap: 4px !important
+    flex-wrap: nowrap !important
+    line-height: 1.5 !important
 
-    .gt-comment-block-1
-      display: none !important
-
-    .gt-comment-username
-      color: var(--primary) !important
-      font-weight: 600 !important
-      margin-right: 8px !important
-      text-decoration: none !important
-      pointer-events: none !important
-      line-height: 1.5 !important
-
-    .gt-comment-text
-      margin-right: 8px !important
-      color: var(--neut-L75) !important
-      line-height: 1.5 !important
-
-    .gt-comment-date
-      color: var(--neut-L75) !important
-      margin-right: auto !important
-      line-height: 1.5 !important
-
-  .gt-comment-text
-    color: var(--neut-L75) !important
+  // 用户名
+  .gt-comment-username
+    color: var(--neut-L90) !important
+    font-weight: 600 !important
+    text-decoration: none !important
     font-size: 14px !important
-    line-height: 1.6 !important
+    line-height: 1.5 !important
 
+    &:hover
+      color: var(--primary) !important
+
+  // 隐藏小蓝块
+  .gt-comment-block-1
+  .gt-comment-block-2
+    display: none !important
+
+  // 发表于文字
+  .gt-comment-text
+    color: var(--neut-L50) !important
+    font-size: 14px !important
+    line-height: 1.5 !important
+
+  // 日期
+  .gt-comment-date
+    color: var(--neut-L50) !important
+    font-size: 14px !important
+    line-height: 1.5 !important
+
+  // 评论正文 - 强制所有文字颜色
   .gt-comment-body
     color: var(--neut-L90) !important
     font-size: 14px !important
-    line-height: 1.8 !important
-
-    h1, h2, h3, h4, h5, h6
-      color: var(--neut-L90) !important
+    line-height: 1.6 !important
 
     p
       color: var(--neut-L90) !important
-      margin: 0 0 12px 0 !important
+      margin: 0 0 8px 0 !important
 
       &:last-child
         margin-bottom: 0 !important
 
-  // 回复和点赞按钮 - 同一水平线显示，带边框，正方形
+    h1, h2, h3, h4, h5, h6
+      color: var(--neut-L90) !important
+
+    ul, ol
+      color: var(--neut-L90) !important
+
+    li
+      color: var(--neut-L90) !important
+
+    strong, b
+      color: var(--neut-L90) !important
+
+    code
+      background-color: var(--article-code-bg) !important
+      color: var(--neut-L90) !important
+      padding: 2px 6px !important
+      border-radius: 3px !important
+      font-size: 85% !important
+
+    pre
+      background-color: var(--article-block) !important
+      color: var(--neut-L90) !important
+      padding: 16px !important
+      border-radius: 6px !important
+      overflow-x: auto !important
+
+    blockquote
+      border-left: 4px solid var(--neut-L10) !important
+      padding-left: 16px !important
+      margin-left: 0 !important
+      color: var(--neut-L75) !important
+
+    img
+      max-width: 100% !important
+      border-radius: 6px !important
+
+    a
+      color: var(--link) !important
+      text-decoration: none !important
+
+      &:hover
+        text-decoration: underline !important
+
+  // 操作按钮区域
+  .gt-comment-footer
+    margin-top: 12px !important
+    display: flex !important
+    align-items: center !important
+    gap: 8px !important
+
+  // 操作按钮
   .gt-comment-edit
   .gt-comment-reply
-    @extend $text-btn
-    color: var(--primary) !important
-    width: 36px !important
-    height: 36px !important
-    padding: 0 !important
-    border: 1px solid var(--neut-L20) !important
-    border-radius: inner-radius !important
-    display: inline-flex !important
-    align-items: center !important
-    justify-content: center !important
-
-    .gt-ico
-      display: flex !important
-      align-items: center !important
-      justify-content: center !important
-
-    .gt-svg
-      width: 18px !important
-      height: 18px !important
-      display: flex !important
-      align-items: center !important
-      justify-content: center !important
-
-    svg
-      width: 18px !important
-      height: 18px !important
-
   .gt-comment-like
-    color: var(--neut-L75) !important
-    margin-right: 12px !important
-    width: 36px !important
-    height: 36px !important
-    padding: 0 !important
+    color: var(--neut-L50) !important
+    font-size: 12px !important
+    background: transparent !important
+    border: none !important
+    padding: 4px 8px !important
+    border-radius: 6px !important
     display: inline-flex !important
     align-items: center !important
-    justify-content: center !important
-    border: 1px solid var(--neut-L20) !important
-    border-radius: inner-radius !important
-
-    .gt-ico
-      display: flex !important
-      align-items: center !important
-      justify-content: center !important
-      width: 100% !important
-      height: 100% !important
-
-    .gt-svg
-      width: 18px !important
-      height: 18px !important
-      display: flex !important
-      align-items: center !important
-      justify-content: center !important
-
-    svg
-      width: 18px !important
-      height: 18px !important
+    gap: 4px !important
 
     &:hover
       color: var(--primary) !important
-      border-color: var(--primary) !important
+      background-color: var(--btn-text-hover) !important
 
-  // 链接使用主题样式
+  // 楼中楼
+  .gt-comment-replies
+    margin-top: 16px !important
+    margin-left: 0 !important
+    padding-left: 16px !important
+    border-left: 2px solid var(--neut-L10) !important
+
+    .gt-comment
+      border-bottom: none !important
+      padding: 12px 0 !important
+
+      &:first-child
+        padding-top: 0 !important
+
+      &:last-child
+        padding-bottom: 0 !important
+
+  // 链接
   .gt-link
     color: var(--link) !important
-    border-bottom: none !important
+    text-decoration: none !important
 
     &:hover
-      background: var(--link-hover-bg) !important
+      text-decoration: underline !important
 
-  .gt-link-counts
-  .gt-link-project
-    color: var(--primary) !important
-
-  // 图标
-  .gt-svg svg
-    fill: var(--primary) !important
-
-  .gt-ico-text
-    color: var(--neut-L75) !important
-    font-size: 14px !important
-
-  // 弹出层 - 使用卡片样式
+  // 弹出层
   .gt-popup
-    @extend $card
-    border: none !important
-    padding: 16px !important
+    background-color: var(--card-background) !important
+    border: 1px solid var(--neut-L10) !important
+    border-radius: 6px !important
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2) !important
 
   // 版权信息
   .gt-copyright
-    margin-top: 32px !important
+    color: var(--neut-L50) !important
+    font-size: 12px !important
+    margin-top: 24px !important
     padding-top: 16px !important
     border-top: 1px solid var(--neut-L10) !important
-    font-size: 14px !important
-    color: var(--neut-L75) !important
     text-align: center !important
-
-    a
-      color: var(--link) !important
 
   // 加载状态
   .gt-loading
-    color: var(--neut-L90) !important
-    font-size: 14px !important
-    padding: 40px 0 !important
-    text-align: center !important
+    color: var(--neut-L75) !important
 
-  // 未初始化状态 - 使用卡片样式
+  // 未初始化状态
   .gt-no-init
-    @extend $card
-    padding: 48px 24px !important
+    background-color: var(--card-background) !important
+    border: 1px solid var(--neut-L10) !important
+    border-radius: 6px !important
+    padding: 32px !important
     text-align: center !important
 
-    p
-      margin: 0 0 12px 0 !important
-      font-size: 14px !important
-      color: var(--neut-L75) !important
-
-    a
-      color: var(--link) !important
+  // 错误提示
+  .gt-error
+    color: #cf222e !important
+    background-color: rgba(207, 34, 46, 0.1) !important
+    border: 1px solid rgba(207, 34, 46, 0.2) !important
+    border-radius: 6px !important
+    padding: 16px !important
 
   // 元信息
   .gt-meta
-    margin-bottom: 24px !important
+    margin-bottom: 16px !important
 
   .gt-counts
     color: var(--neut-L75) !important
@@ -402,44 +312,63 @@
 
   // 分页
   .gt-pagination
-    margin-top: 32px !important
+    margin-top: 24px !important
     display: flex !important
     justify-content: center !important
-    gap: 8px !important
+    gap: 4px !important
 
     .gt-btn-page
-      @extend $text-btn
-      min-width: 36px !important
+      min-width: 32px !important
+      height: 32px !important
       padding: 0 !important
+      display: flex !important
+      align-items: center !important
+      justify-content: center !important
+      border-radius: 6px !important
 
-    .gt-current
-      background: var(--primary) !important
-      color: var(--primary-btn-text) !important
+    .gt-btn-page.gt-current
+      background-color: var(--primary) !important
+      color: white !important
+      border-color: transparent !important
 
   // 表情选择器
   .gt-emoji-picker
-    @extend $card
-    border: none !important
-    padding: 12px !important
+    background-color: var(--card-background) !important
+    border: 1px solid var(--neut-L10) !important
+    border-radius: 6px !important
 
   .gt-emoji-picker-item
-    &:hover
-      background: var(--btn-hover) !important
-      border-radius: 4px !important
+    border-radius: 4px !important
 
-  // 用户相关 - 隐藏登录后的用户信息，保持 UI 统一
-  .gt-user
+    &:hover
+      background-color: var(--btn-text-hover) !important
+
+  // SVG 图标
+  .gt-svg svg
+    fill: currentColor !important
+
+  // 头像
+  .gt-avatar img
+    border-radius: 6px !important
+
+  // 头部头像 - 放大到 56px
+  .gt-header-avatar
+    width: 56px !important
+    height: 56px !important
+
+    img
+      width: 56px !important
+      height: 56px !important
+      border-radius: 8px !important
+
+  // 占位符颜色
+  .gt-header-textarea::placeholder
+    color: var(--neut-L30) !important
+
+  // 隐藏 Markdown 提示
+  .gt-header-controls-tip
     display: none !important
 
-  // 统一管理员/自己的评论样式与普通评论一致
-  .gt-comment-admin
-    .gt-comment-content
-      background-color: transparent !important
-      background: transparent !important
-      box-shadow: none !important
-
-  // 错误提示
-  .gt-error
-    color: #ff6b6b !important
-    text-align: center !important
-    padding: 20px !important
+  // 标签页
+  .gt-header-controls
+    margin-bottom: 8px !important
