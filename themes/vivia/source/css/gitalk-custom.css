@@ -35,3 +35,47 @@
 .gt-container .gt-user {
   display: none !important;
 }
+
+/* 7. 调整评论头部布局 - 将用户名和发表于向右移动 */
+.gt-container .gt-comment-header {
+  padding-left: 0 !important;
+  margin-left: 0 !important;
+}
+
+/* 8. 调整用户名和发表于的位置 */
+.gt-container .gt-comment-username {
+  margin-left: 0 !important;
+}
+
+/* 9. 确保评论内容区域对齐 */
+.gt-container .gt-comment-content {
+  margin-left: 1.25em !important;
+}
+
+/* 10. 统一评论输入框区域样式 */
+.gt-container .gt-header {
+  display: flex !important;
+  align-items: flex-start !important;
+}
+
+/* 11. 确保头像区域宽度一致 */
+.gt-container .gt-avatar {
+  width: 3.125em !important;
+  height: 3.125em !important;
+  flex-shrink: 0 !important;
+}
+
+/* 12. 统一按钮显示 */
+.gt-container .gt-comment-like,
+.gt-container .gt-comment-reply {
+  position: absolute !important;
+  top: 0 !important;
+}
+
+.gt-container .gt-comment-like {
+  right: 2em !important;
+}
+
+.gt-container .gt-comment-reply {
+  right: 0 !important;
+}
