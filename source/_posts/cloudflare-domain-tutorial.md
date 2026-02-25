@@ -105,8 +105,7 @@ NS 服务器修改后，需要等待 24-48 小时全球生效（通常几分钟�
 ### 验证配置
 
 访问 `https://你的域名`，查看浏览器地址栏：
-- 应该显示 🔒 安全锁标志
-- 点击锁标志，查看证书是否由 Cloudflare 颁发
+- 应该显示安全锁标志
 
 打开命令提示符，运行：
 
@@ -121,51 +120,3 @@ nslookup 你的域名
 - 有则说明经过 Cloudflare CDN
 
 ---
-
-### 常见问题
-
-**修改 NS 后网站无法访问？**
-- 等待 DNS 传播（最长 48 小时）
-- 检查 Cloudflare DNS 记录是否正确
-- 确认服务器 IP 没有变化
-
-**SSL 证书显示无效？**
-- 确认选择了正确的 SSL 模式
-- 如果是 Full (strict) 模式，确保服务器有有效证书
-- 可以先用 Flexible 模式测试
-
-**如何暂停 Cloudflare？**
-- 进入 **Overview** 页面
-- 点击 **Pause Cloudflare on Site**
-- 这会临时绕过 Cloudflare，直接访问源站
-
----
-
-### 进阶优化
-
-开启 Brotli 压缩：
-1. 进入 **Speed** → **Optimization**
-2. 开启 **Brotli**
-
-开启 HTTP/2 和 HTTP/3：
-进入 **Network** 设置，确保开启：
-- HTTP/2
-- HTTP/3 (QUIC)
-- 0-RTT Connection Resumption
-
-配置防火墙规则：
-1. 进入 **Security** → **WAF**
-2. 可以设置阻止特定国家/地区、特定 IP、速率限制等
-
----
-
-### 总结
-
-完成以上步骤后，你的域名就成功托管到 Cloudflare 了：
-
-✅ 享受 Cloudflare 的全球 CDN 加速  
-✅ 免费的 SSL 证书和 HTTPS 加密  
-✅ DDoS 防护和 Web 应用防火墙  
-✅ DNS 解析加速
-
-如有问题，可以在 Cloudflare 社区或文档中寻找帮助。

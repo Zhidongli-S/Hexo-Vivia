@@ -64,9 +64,10 @@ Gitalk 是一个基于 GitHub Issue 的评论系统，具有以下特点：
 </script>
 ```
 
-**注意：**
+**关键配置说明：**
 - **admin 参数必须使用 JSON.stringify 输出数组格式**，否则会导致权限不足无法创建 Issue
 - **id 使用 md5(location.pathname)** 避免中文路径编码后超过 50 字符限制
+- **owner 必须与 GitHub 用户名大小写完全一致**，否则会出现 404 错误无法加载 Issue
 
 ---
 
@@ -75,7 +76,7 @@ Gitalk 是一个基于 GitHub Issue 的评论系统，具有以下特点：
 在 `layout/post.ejs` 和 `layout/page.ejs` 中添加：
 
 ```html
-<% if (theme.gitalk.enable) { %>
+<% if (theme.gitalk && theme.gitalk.enable) { %>
     <%- partial('_plugins/gitalk') %>
 <% } %>
 ```
@@ -94,61 +95,16 @@ gitalk:
   repo: 仓库名
   owner: GitHub用户名
   adminUser: ['GitHub用户名']
-  ID: location.pathname
-  labels: ['Gitalk']
+  labels: 'Gitalk'
   perPage: 10
   pagerDirection: last
   createIssueManually: false
   distractionFreeMode: false
 ```
 
-**注意：**
-- **owner 必须与 GitHub 用户名大小写完全一致**，否则会出现 404 错误无法加载 Issue
+**配置注意事项：**
 - **如果主题目录下有多个配置文件**（如 `_config.yml` 和 `_config.vivia.yml`），建议两个文件保持同步修改
-
----
-
-### 样式优化
-
-为了让 Gitalk 与 Vivia 主题风格统一，在 `source/css/_partial/comment.styl` 中添加：
-
-```stylus
-.gt-container
-  margin-top: 32px
-  padding: 0 article-side-padding
-
-  .gt-header
-    @extend $card
-    padding: 24px
-    margin-bottom: block-margin
-
-  .gt-header-textarea
-    background: var(--input-field) !important
-    color: var(--neut-L90) !important
-    border: none !important
-    border-radius: inner-radius !important
-
-  .gt-btn
-    @extend $text-btn
-    border: none !important
-
-  .gt-btn-public
-  .gt-btn-login
-    background: var(--primary-btn-bg) !important
-    color: var(--primary-btn-text) !important
-
-  .gt-comment
-    @extend $card
-    padding: 20px 24px !important
-    margin-bottom: block-margin !important
-
-  .gt-link
-    color: var(--link) !important
-    border-bottom: none !important
-```
-
-**注意：**
-- **Gitalk 默认样式没有适配深色主题**，需要使用 CSS 变量覆盖以确保在深色模式下正常显示
+- **repo 是仓库名称，不是完整 URL**，例如 `my-blog` 而不是 `https://github.com/user/my-blog`
 
 ---
 
@@ -257,22 +213,3 @@ jobs:
 ```
 
 ---
-
-### 最终文件结构
-
-```
-themes/vivia/
-├── layout/
-│   ├── _plugins/
-│   │   └── gitalk.ejs
-│   ├── post.ejs
-│   └── page.ejs
-└── source/
-    └── css/
-        └── _partial/
-            └── comment.styl
-
-.github/
-└── workflows/
-    └── create-gitalk-issues.yml
-```
