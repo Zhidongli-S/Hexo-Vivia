@@ -427,13 +427,13 @@
       background: var(--btn-hover) !important
       border-radius: 4px !important
 
-  // 用户相关
+  // 用户相关 - 隐藏登录后的用户信息，保持 UI 统一
   .gt-user
-    color: var(--neut-L90) !important
-    font-size: 14px !important
+    display: none !important
 
-    .gt-ico svg
-      fill: var(--neut-L90) !important
+  // 隐藏 GitHub 头像按钮
+  .gt-avatar-github
+    display: none !important
 
   // 错误提示
   .gt-error
